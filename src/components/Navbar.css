@@ -1,0 +1,48 @@
+.navbar {
+  width: 100%;
+  padding: 12px 0;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 65px;      /* PERBESAR UKURAN LOGO */
+  width: auto;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  gap: 35px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.nav-links a:hover {
+  color: #007BFF;
+}

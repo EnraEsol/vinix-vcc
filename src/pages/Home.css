@@ -1,0 +1,257 @@
+/* ======================================
+   GLOBAL HOME PAGE WRAPPER
+====================================== */
+.home {
+  width: 100%;
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+/* ======================================
+   HERO SECTION
+====================================== */
+.hero {
+  width: 100%;
+  padding: 80px 8%;
+  margin-top: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+
+  background: linear-gradient(135deg, #e8eeff 0%, #f5f7ff 100%);
+  border-radius: 0 0 28px 28px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* HERO TEXT */
+.hero-content {
+  max-width: 500px;
+  text-align: left;
+}
+
+.hero-content h1 {
+  font-size: 46px;
+  font-weight: 800;
+  color: #1d4ed8;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.hero-content p {
+  font-size: 17px;
+  color: #4b5563;
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+
+/* HERO BUTTONS */
+.hero-buttons {
+  display: flex;
+  gap: 14px;
+}
+
+.hero-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.hero-btn.primary {
+  background: #2563eb;
+  color: white;
+}
+
+.hero-btn.primary:hover {
+  background: #1e4ed8;
+}
+
+.hero-btn.secondary {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.hero-btn.secondary:hover {
+  background: #f3f4f6;
+}
+
+/* HERO IMAGE */
+.hero-illustration img {
+  width: 360px;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+}
+
+/* ======================================
+   MAIN SECTION (VCC INTRO)
+====================================== */
+.main-section {
+  padding: 70px 8%;
+  text-align: center;
+}
+
+.main-title {
+  font-size: 34px;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin-bottom: 16px;
+}
+
+.main-desc {
+  max-width: 650px;
+  margin: auto;
+  font-size: 17px;
+  color: #4b5563;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.main-btn {
+  padding: 12px 28px;
+  background: #2563eb;
+  color: white;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+.main-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ======================================
+   RECOMMENDED PROJECTS SECTION
+====================================== */
+.recommended-section {
+  width: 100%;
+  padding: 80px 8%;
+  background: #f7f9ff;
+  border-top: 1px solid #e4e7f2;
+}
+
+.recommended-wrapper {
+  max-width: 1150px;
+  margin: auto;
+}
+
+.recommended-title {
+  font-size: 30px;
+  color: #1e3a8a;
+  font-weight: 800;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+/* PROJECT GRID */
+.recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 26px;
+  align-items: start;
+}
+
+/* PROJECT CARD */
+.recommend-card {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: 0.25s ease;
+}
+
+.recommend-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
+}
+
+.recommend-card h4 {
+  font-size: 20px;
+  color: #1f2a69;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.recommend-desc {
+  font-size: 14.5px;
+  color: #4b5563;
+  margin-bottom: 18px;
+  line-height: 1.55;
+}
+
+/* TAGS */
+.recommend-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.recommend-tag {
+  padding: 6px 12px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 12px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* CARD BUTTON */
+.recommend-btn {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+.recommend-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+/* ======================================
+   RESPONSIVE
+====================================== */
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 60px 6%;
+    gap: 40px;
+  }
+
+  .hero-content {
+    text-align: center;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-illustration img {
+    width: 260px;
+    margin-top: 20px;
+  }
+}
