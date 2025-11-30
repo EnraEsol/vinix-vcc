@@ -1,0 +1,96 @@
+/* PAGE WRAPPER */
+.compare-page {
+  max-width: 1150px;
+  margin: 40px auto;
+  padding: 0 20px 60px;
+}
+
+/* HEADER */
+.compare-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.compare-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #0f172a;
+}
+
+/* REMOVE BUTTON (small X) */
+.remove-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #ef4444;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.remove-btn:hover {
+  color: #b91c1c;
+}
+
+/* TABLE */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(15, 23, 42, 0.05);
+}
+
+.compare-table th,
+.compare-table td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.compare-table thead {
+  background: #f8fafc;
+}
+
+.compare-table th {
+  font-weight: 600;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.compare-table td {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.45;
+}
+
+/* FIRST COLUMN (Field name) */
+.compare-table td:first-child,
+.compare-table th:first-child {
+  background: #f1f5f9;
+  width: 180px;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* LAST ROW (remove extra border) */
+.compare-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* SCROLL on Mobile */
+@media (max-width: 900px) {
+  .compare-page {
+    padding-bottom: 120px;
+  }
+
+  .compare-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

@@ -219,7 +219,7 @@
   padding: 10px 14px;
   border-radius: 10px;
   background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
+  color: white; 
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
@@ -254,4 +254,10 @@
     width: 260px;
     margin-top: 20px;
   }
+}
+.recommend-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }

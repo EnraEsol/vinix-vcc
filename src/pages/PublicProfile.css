@@ -1,0 +1,221 @@
+/* ================================
+   PUBLIC PROFILE PAGE LAYOUT
+   ================================ */
+.profile-page {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 20px;
+}
+
+.profile-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* ================================
+   HEADER
+   ================================ */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.avatar {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #dbeafe;
+  background: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  font-size: 36px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.header-info h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.header-info .muted {
+  margin-top: 2px;
+}
+
+/* ================================
+   INLINE BOX
+   ================================ */
+.box-inline {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.box-inline h4 {
+  margin: 0 0 8px 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* ================================
+   SKILL CHIPS
+   ================================ */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.chip {
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ================================
+   EXPERIENCE ROW
+   ================================ */
+.exp-row {
+  padding: 6px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.exp-row:last-child {
+  border-bottom: none;
+}
+
+/* ================================
+   LINKS
+   ================================ */
+.link-item {
+  display: block;
+  padding: 6px 0;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.link-item:hover {
+  text-decoration: underline;
+}
+
+/* ================================
+   PROJECT ROW
+   ================================ */
+.project-row {
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 8px;
+  background: #f9fafb;
+  transition: 0.2s;
+}
+
+.project-row:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+/* ================================
+   BUTTONS
+   ================================ */
+.btn {
+  padding: 10px 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.btn.ghost:hover {
+  background: #f1f5f9;
+}
+
+/* ================================
+   MUTED TEXT
+   ================================ */
+.muted {
+  color: #6b7280;
+}
+
+.muted.small {
+  font-size: 13px;
+}
+
+/* ================================
+   SPECIAL: AI MATCH SECTION
+   ================================ */
+.box-inline.special {
+  border: 1px solid #c7d2fe;
+  background: #eef2ff;
+}
+
+.match-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.match-score {
+  font-size: 28px;
+  font-weight: 700;
+  background: #2563eb;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 12px;
+}
+
+.match-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.reason-list {
+  margin: 0;
+  margin-left: 14px;
+  padding-left: 14px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.reason-list li {
+  margin-bottom: 4px;
+}

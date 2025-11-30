@@ -1,60 +1,82 @@
 // src/utils/recommend.js
-// Utility sederhana untuk merekomendasikan proyek berbasis skills & metadata.
-// Tidak bergantung pada library eksternal.
+// ============================================================
+// PROJECT RECOMMENDATION ENGINE (Enhanced Version)
+// Menggunakan skill match, recency, dan team-size need scoring
+// ============================================================
 
-import { loadProjects } from "./storage"; // sesuaikan jika utilmu di tempat lain
+import { loadProjects } from "./storage";
 
-// Ambil profil user dari localStorage (key: vinix_user_profile)
-// Struktur contoh:
-// { name: "User Demo", skills: ["React","UI/UX"], interests: ["web","startup"] }
+/* ------------------------------------------------------------
+   GET USER PROFILE
+   Format tersimpan:
+   {
+     name: "User Demo",
+     skills: ["React", "UI/UX"],
+     interests: ["web", "startup"]
+   }
+------------------------------------------------------------ */
 export function getUserProfile() {
   try {
     const raw = localStorage.getItem("vinix_user_profile");
-    if (!raw) return null;
-    return JSON.parse(raw);
+    return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
   }
 }
 
-// Simpel scoring:
-// - skillMatchScore = #matchingSkills / #userSkills (0..1) * 0.7
-// - recencyScore = normalized age weight (0..1) * 0.2
-// - needScore = normalized (1 - membersCountFactor) * 0.1
-// finalScore = weighted sum
+/* ------------------------------------------------------------
+   SCORING FUNCTION (Skill + Recency + Need)
+   WEIGHTS:
+   - Skills 70%
+   - Recency 20%
+   - Member-need 10%
+------------------------------------------------------------ */
 function scoreProjectForUser(project, user) {
   const userSkills = Array.isArray(user?.skills) ? user.skills : [];
   const projectSkills = Array.isArray(project?.skills) ? project.skills : [];
 
-  // Skill overlap
+  /* -----------------------------
+     1. SKILL MATCH (0..1)
+  ------------------------------ */
   const matches = projectSkills.filter((s) =>
-    userSkills.some((us) => us.toLowerCase() === s.toLowerCase())
+    userSkills.some((us) => us.toLowerCase().trim() === s.toLowerCase().trim())
   ).length;
 
-  const skillMatchRatio = userSkills.length ? matches / userSkills.length : 0;
+  const skillMatchRatio =
+    userSkills.length > 0 ? matches / userSkills.length : 0;
 
-  // recency: newer projects score higher
-  const createdAt = project?.createdAt ? new Date(project.createdAt).getTime() : 0;
-  const now = Date.now();
-  const ageDays = (now - createdAt) / (1000 * 60 * 60 * 24);
-  // convert to recencyScore: less days -> higher score; clamp using exponential-ish
-  const recencyScore = Math.max(0, 1 - Math.min(ageDays / 90, 1)); // 0..1 scaled over 90 days
+  /* -----------------------------
+     2. RECENCY SCORE (freshness)
+     New = score tinggi
+     Old = score turun
+  ------------------------------ */
+  const createdAt = project?.createdAt
+    ? new Date(project.createdAt).getTime()
+    : 0;
+  const ageDays = (Date.now() - createdAt) / (1000 * 60 * 60 * 24);
 
-  // needScore: projects with fewer members get slightly higher score
-  const membersCount = Array.isArray(project?.members) ? project.members.length : 0;
-  // assume typical team size 0..8, normalize
+  // Normalize: 0 days → 1.0 | > 90 days → 0
+  const recencyScore = Math.max(0, 1 - Math.min(ageDays / 90, 1));
+
+  /* -----------------------------
+     3. NEED SCORE (0..1)
+     Semakin sedikit member → score makin tinggi
+  ------------------------------ */
+  const membersCount = Array.isArray(project?.members)
+    ? project.members.length
+    : 0;
+
+  // Normalisasi: typical 0..8
   const needScore = 1 - Math.min(membersCount / 8, 1);
 
-  // weights
-  const wSkill = 0.7;
-  const wRecency = 0.2;
-  const wNeed = 0.1;
-
-  const final =
-    skillMatchRatio * wSkill + recencyScore * wRecency + needScore * wNeed;
+  /* -----------------------------
+     FINAL WEIGHT
+  ------------------------------ */
+  const finalScore =
+    skillMatchRatio * 0.7 + recencyScore * 0.2 + needScore * 0.1;
 
   return {
-    score: final,
+    score: finalScore,
     matches,
     skillMatchRatio,
     recencyScore,
@@ -62,36 +84,71 @@ function scoreProjectForUser(project, user) {
   };
 }
 
-// Public function
-// options: {limit: number, minScore: number, includeOwnProjects: bool}
+/* ------------------------------------------------------------
+   MAIN RECOMMENDER FUNCTION
+------------------------------------------------------------ */
 export function recommendProjectsForUser(options = {}) {
-  const { limit = 6, minScore = 0.05, includeOwnProjects = false } = options;
-  const user = getUserProfile();
-  const projects = Array.isArray(loadProjects()) ? loadProjects() : [];
+  const {
+    limit = 6,
+    minScore = 0.05,
+    includeOwnProjects = false,
+  } = options;
 
-  if (!user || !user.skills || user.skills.length === 0) {
-    // fallback: recommend newest projects
-    return projects
+  const user = getUserProfile();
+  const allProjects = loadProjects() || [];
+
+  /* ------------------------------------------------------------
+     FALLBACK → Jika user belum punya skill
+     Tampilkan proyek terbaru (bukan random)
+  ------------------------------------------------------------ */
+  if (!user?.skills || user.skills.length === 0) {
+    return allProjects
       .slice()
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
       .slice(0, limit)
-      .map((p) => ({ project: p, score: 0 }));
+      .map((p) => ({
+        project: p,
+        score: 0,
+        matches: 0,
+        skillMatchRatio: 0,
+        recencyScore: 0,
+        needScore: 0,
+      }));
   }
 
-  const scored = projects
+  /* ------------------------------------------------------------
+     MAIN SCORING PIPELINE
+  ------------------------------------------------------------ */
+  const userLower = user.name?.toLowerCase() || "";
+
+  const scored = allProjects
     .filter((p) => {
-      // optionally exclude projects the user already owns or is a member of
       if (!includeOwnProjects) {
-        if ((p.owner || "").toLowerCase() === (user.name || "").toLowerCase()) return false;
-        if (Array.isArray(p.members) && p.members.some((m) => (m.name || "").toLowerCase() === (user.name || "").toLowerCase())) return false;
+        // tidak rekomendasikan proyek sendiri
+        if ((p.owner || "").toLowerCase() === userLower) return false;
+
+        // tidak rekomendasikan proyek yg sudah diikuti
+        if (
+          Array.isArray(p.members) &&
+          p.members.some(
+            (m) => (m.name || "").toLowerCase() === userLower
+          )
+        )
+          return false;
       }
       return true;
     })
     .map((p) => {
       const meta = scoreProjectForUser(p, user);
-      return { project: p, ...meta };
+      return {
+        project: p,
+        ...meta,
+      };
     })
-    .filter((s) => s.score >= minScore)
+    .filter((item) => item.score >= minScore)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 

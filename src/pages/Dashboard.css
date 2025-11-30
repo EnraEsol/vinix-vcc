@@ -1,0 +1,172 @@
+/* WRAPPER */
+.dash-wrap {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 20px;
+}
+
+.dash-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+/* MAIN LAYOUT */
+.dash-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+}
+
+/* COMMON BOX */
+.box {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+.box h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* PROJECT CARD */
+.project-card {
+  border: 1px solid #eee;
+  padding: 14px;
+  border-radius: 10px;
+  background: white;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.project-card:hover {
+  background: #fafafa;
+}
+
+.project-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+}
+
+.badge.green {
+  background: #22c55e;
+}
+
+.status-todo {
+  background: #e5e7eb;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.status-inprogress {
+  background: #3b82f6;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.status-done {
+  background: #22c55e;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* PROGRESS */
+.progress-wrap {
+  margin-top: 12px;
+}
+
+.progress-bar {
+  width: 100%;
+  background: #eee;
+  height: 8px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4ade80;
+}
+
+.progress-text {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #555;
+}
+
+/* TASK ITEM */
+.task-item-dash {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+/* ACTIVITY */
+.activity-item-dash {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* SIDEBAR */
+.dash-sidebar .box {
+  position: sticky;
+  top: 80px;
+}
+
+/* NOTIFICATIONS */
+.notif-item-dash {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.notif-item-dash:hover {
+  background: #fafafa;
+}
+
+.notif-msg {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+/* REUSABLE TEXT STYLES */
+.muted {
+  color: #777;
+}
+
+.small {
+  font-size: 13px;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 900px) {
+  .dash-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-sidebar .box {
+    position: relative;
+    top: 0;
+  }
+}

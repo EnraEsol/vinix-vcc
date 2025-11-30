@@ -1,34 +1,63 @@
+/* =========================================================
+   GLOBAL RESET & BASE
+========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
 /* Background lembut */
 body {
-  margin: 0;
-  padding-top: 110px;
+  padding-top: 110px; /* supaya tidak tertutup navbar */
   font-family: "Inter", sans-serif;
   background: #f7f9fc;
   color: #333;
+  overflow-x: hidden;  /* mencegah geser karena banner */
 }
 
-/* Wrapper halaman */
+/* =========================================================
+   MAIN CONTENT WRAPPER
+========================================================= */
+.main-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  z-index: 5;
+}
+
+/* Untuk halaman yang pakai container khusus */
 .content-container {
   max-width: 1100px;
   margin: auto;
   padding: 30px 20px;
 }
 
-/* Card Default */
+/* =========================================================
+   CARD COMPONENT
+========================================================= */
 .card {
   background: white;
   padding: 20px;
   border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   transition: 0.2s ease;
 }
 
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* Button */
+/* =========================================================
+   BUTTONS
+========================================================= */
 .btn {
   display: inline-block;
   background: #0066ff;
@@ -37,20 +66,128 @@ body {
   border-radius: 8px;
   text-decoration: none;
   transition: 0.2s ease;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
 }
 
 .btn:hover {
   background: #0052cc;
 }
 
-/* Heading */
-h1, h2, h3 {
-  color: #222;
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #333;
 }
 
-/* Grid layout untuk explore */
+.btn.ghost:hover {
+  background: #f3f4f6;
+}
+
+/* SMALL BUTTON */
+.btn.small {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* =========================================================
+   TITLES & TEXT
+========================================================= */
+h1, h2, h3 {
+  color: #222;
+  font-weight: 700;
+}
+
+p {
+  line-height: 1.5;
+}
+
+/* =========================================================
+   GRID DEFAULT
+========================================================= */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
+}
+
+/* =========================================================
+   NOTIFICATION SYSTEM
+========================================================= */
+.notif-badge {
+  background: #ef4444;
+  color: white;
+  border-radius: 999px;
+  padding: 2px 6px;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 36px;
+  width: 320px;
+  background: white;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  z-index: 40;
+}
+
+.notif-item.unread {
+  background: #f8fbff;
+}
+
+.dot-unread {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  display: inline-block;
+  float: right;
+  margin-top: 6px;
+}
+
+.small-badge {
+  background: #0ea5e9;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+/* =========================================================
+   BANNER IKLAN (LEFT + RIGHT)
+========================================================= */
+.ad-banner {
+  position: fixed;
+  top: 140px;
+  width: 230px;
+  height: 520px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  z-index: 3;
+}
+
+/* posisi kiri */
+.ad-left {
+  left: 20px;
+}
+
+/* posisi kanan */
+.ad-right {
+  right: 20px;
+}
+
+/* Responsive: matikan banner di HP */
+@media (max-width: 1200px) {
+  .ad-banner {
+    display: none;
+  }
 }

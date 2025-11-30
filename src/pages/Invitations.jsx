@@ -5,114 +5,200 @@ import {
   getInvitationsForUser,
   acceptInvite,
   rejectInvite,
+  loadProjects,
+  acceptApplicant,
+  rejectApplicant
 } from "../utils/storage";
 import { Link } from "react-router-dom";
+import "./Invitations.css";
 
 export default function Invitations() {
   const user = getCurrentUser();
   const [invites, setInvites] = useState([]);
+  const [ownedProjects, setOwnedProjects] = useState([]); // untuk pelamar
 
   useEffect(() => {
-    if (user) {
-      const list = getInvitationsForUser(user.name);
-      setInvites(list);
-    }
+    if (!user) return;
+
+    // 1. Ambil undangan masuk
+    setInvites(getInvitationsForUser(user.name));
+
+    // 2. Ambil project yang user miliki untuk melihat pelamar
+    const allProjects = loadProjects();
+    setOwnedProjects(allProjects.filter((p) => p.owner === user.name));
   }, [user]);
 
   if (!user) {
     return (
-      <div style={{ padding: 20 }}>
+      <div className="inv-container">
         <h2>Kamu belum login</h2>
       </div>
     );
   }
 
+  // ======================
+  // FUNGSI UNDANGAN MASUK
+  // ======================
   const handleAccept = (inv) => {
     const ok = acceptInvite(inv.projectId, inv.id);
-    if (ok) {
-      alert("Kamu berhasil bergabung ke project!");
-      setInvites((s) =>
-        s.map((x) => (x.id === inv.id ? { ...x, status: "accepted" } : x))
-      );
-    } else alert("Gagal menerima undangan.");
+    if (!ok) return alert("Gagal menerima undangan.");
+
+    alert("Kamu berhasil bergabung ke project!");
+    setInvites((s) =>
+      s.map((x) =>
+        x.id === inv.id ? { ...x, status: "accepted" } : x
+      )
+    );
   };
 
   const handleReject = (inv) => {
     const ok = rejectInvite(inv.projectId, inv.id);
-    if (ok) {
-      setInvites((s) =>
-        s.map((x) => (x.id === inv.id ? { ...x, status: "rejected" } : x))
-      );
-    } else alert("Gagal menolak undangan.");
+    if (!ok) return alert("Gagal menolak undangan.");
+
+    setInvites((s) =>
+      s.map((x) =>
+        x.id === inv.id ? { ...x, status: "rejected" } : x
+      )
+    );
+  };
+
+  // ======================
+  // FUNGSI PELAMAR PROJECT KITA
+  // ======================
+  const handleApplicant = (projectId, applicant, decision) => {
+    if (decision === "accept") {
+      acceptApplicant(projectId, applicant.name);
+    } else {
+      rejectApplicant(projectId, applicant.name);
+    }
+
+    // refresh project owner
+    const all = loadProjects();
+    setOwnedProjects(all.filter((p) => p.owner === user.name));
   };
 
   return (
-    <div style={{ padding: 20, maxWidth: 700, margin: "0 auto" }}>
-      <h1>Undangan Masuk</h1>
+    <div className="inv-container">
+      <h1>Invitations & Applicants</h1>
 
-      {invites.length === 0 && <div className="muted">Tidak ada undangan.</div>}
+      {/* =============================================================
+          A. UNDANGAN MASUK (untuk user ini)
+      ============================================================= */}
+      <section className="inv-section">
+        <h2>Undangan Masuk</h2>
 
-      {invites.map((inv) => (
-        <div
-          key={inv.id}
-          style={{
-            padding: 14,
-            border: "1px solid #e5e7eb",
-            borderRadius: 10,
-            marginBottom: 10,
-          }}
-        >
-          <h3 style={{ margin: 0 }}>
-            Undangan ke proyek:{" "}
-            <Link to={`/project/${inv.projectId}`}>{inv.projectTitle}</Link>
-          </h3>
+        {invites.length === 0 && (
+          <div className="empty">Tidak ada undangan.</div>
+        )}
 
-          <div style={{ marginTop: 6 }}>
-            <strong>Role:</strong> {inv.role}
+        {invites.map((inv) => (
+          <div key={inv.id} className="inv-card">
+            <div className="inv-left">
+              <h3>
+                Undangan ke proyek:{" "}
+                <Link to={`/project/${inv.projectId}`}>
+                  {inv.projectTitle || "Project"}
+                </Link>
+              </h3>
+
+              <div className="info">
+                <strong>Role:</strong> {inv.role}
+              </div>
+
+              <div className="info">
+                <strong>Pesan:</strong> {inv.message}
+              </div>
+
+              <div className="meta">
+                Dari: {inv.invitedBy}
+              </div>
+            </div>
+
+            <div className="inv-right">
+              {inv.status === "pending" ? (
+                <>
+                  <button
+                    className="btn small"
+                    onClick={() => handleAccept(inv)}
+                  >
+                    Terima
+                  </button>
+                  <button
+                    className="btn small ghost"
+                    onClick={() => handleReject(inv)}
+                  >
+                    Tolak
+                  </button>
+                </>
+              ) : (
+                <span className={`badge ${inv.status}`}>
+                  {inv.status.toUpperCase()}
+                </span>
+              )}
+            </div>
           </div>
+        ))}
+      </section>
 
-          <div style={{ marginTop: 4 }}>
-            <strong>Pesan:</strong> {inv.message}
-          </div>
+      {/* =============================================================
+          B. LAMARAN MASUK (khusus owner project)
+      ============================================================= */}
+      <section className="inv-section">
+        <h2>Lamaran Masuk ke Proyek Kamu</h2>
 
-          <div style={{ marginTop: 6, fontSize: 13, color: "#6b7280" }}>
-            Dari: {inv.invitedBy}
-          </div>
+        {ownedProjects.length === 0 && (
+          <div className="empty">Kamu tidak memiliki proyek.</div>
+        )}
 
-          <div style={{ marginTop: 10 }}>
-            {inv.status === "pending" ? (
-              <>
-                <button
-                  className="btn small"
-                  onClick={() => handleAccept(inv)}
-                  style={{ marginRight: 8 }}
-                >
-                  Terima
-                </button>
-                <button
-                  className="btn small ghost"
-                  onClick={() => handleReject(inv)}
-                >
-                  Tolak
-                </button>
-              </>
+        {ownedProjects.map((p) => (
+          <div key={p.id} className="owner-project">
+            <h3>{p.title}</h3>
+
+            {(p.applicants || []).length === 0 ? (
+              <div className="empty small">Belum ada pelamar.</div>
             ) : (
-              <span
-                style={{
-                  padding: "6px 10px",
-                  borderRadius: 8,
-                  background:
-                    inv.status === "accepted" ? "#10b981" : "#ef4444",
-                  color: "white",
-                  fontSize: 13,
-                }}
-              >
-                {inv.status.toUpperCase()}
-              </span>
+              p.applicants.map((ap) => (
+                <div key={ap.id} className="app-card">
+                  <div className="app-left">
+                    <strong>{ap.name}</strong>
+                    <p>{ap.message}</p>
+                    <span className="meta">
+                      {new Date(ap.date).toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div className="app-right">
+                    {ap.status === "pending" ? (
+                      <>
+                        <button
+                          className="btn small"
+                          onClick={() =>
+                            handleApplicant(p.id, ap, "accept")
+                          }
+                        >
+                          ✔ Terima
+                        </button>
+                        <button
+                          className="btn small ghost"
+                          onClick={() =>
+                            handleApplicant(p.id, ap, "reject")
+                          }
+                        >
+                          ✖ Tolak
+                        </button>
+                      </>
+                    ) : (
+                      <span className={`badge ${ap.status}`}>
+                        {ap.status.toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))
             )}
           </div>
-        </div>
-      ))}
+        ))}
+      </section>
     </div>
   );
 }

@@ -204,3 +204,53 @@ function buildReasons(
 export function topCandidates(projectOrId, n = 5, options = {}) {
   return matchCandidates(projectOrId, options).slice(0, n);
 }
+
+/* ============================================================
+   NEW: matchUserToProject
+   - Mengembalikan object terstruktur untuk user tertentu:
+     { scoreRaw, scorePercent, category, matchedSkills, matchedBadges, matchedExperience, reasons }
+   - Normalisasi: karena `score` bersifat relatif (bergantung jumlah skill dan badge),
+     kita melakukan perkiraan maximum score untuk normalisasi agar menghasilkan 0-100%.
+   - Pendekatan normalisasi bersifat heuristik (praktis & cukup akurat untuk UI).
+   ============================================================ */
+export function matchUserToProject(projectOrId, user) {
+  if (!projectOrId || !user) return null;
+  const project =
+    typeof projectOrId === "string" ? getProjectById(projectOrId) : projectOrId;
+  if (!project) return null;
+
+  const requiredSkills = Array.isArray(project.skills) ? project.skills : [];
+  const userSkills = user.skills || [];
+  const userBadges = user.badges || [];
+  const userExps = user.experiences || [];
+
+  const calc = calculateMatchScore(requiredSkills, userSkills, userBadges, userExps);
+  const scoreRaw = calc.score || 0;
+
+  // Heuristic for normalization:
+  // - maxSkillScore = requiredSkills.length * 12
+  // - potential badge + exp bonus approx = requiredSkills.length * (6 + 4) but cap reasonably
+  // - relevance multiplier can increase score, so we multiply base possible by 1.5
+  const maxSkillScore = Math.max(requiredSkills.length * 12, 1);
+  const estBonus = Math.min(requiredSkills.length * 10, 40); // caps bonus influence
+  const theoreticalMax = (maxSkillScore + estBonus) * 1.5 + 4; // +4 for multi-skill bonus
+  const scorePercent = Math.min(100, Math.round((scoreRaw / theoreticalMax) * 100));
+
+  // category
+  let category = "Kurang Cocok";
+  if (scorePercent >= 80) category = "Sangat Cocok";
+  else if (scorePercent >= 50) category = "Cocok";
+
+  // reasons (reuse builder but make copy)
+  const reasons = buildReasons(calc.matchedSkills, calc.matchedBadges, calc.matchedExperience, scoreRaw, calc.relevanceWeight);
+
+  return {
+    scoreRaw,
+    scorePercent,
+    category,
+    matchedSkills: calc.matchedSkills,
+    matchedBadges: calc.matchedBadges,
+    matchedExperience: calc.matchedExperience,
+    reasons,
+  };
+}

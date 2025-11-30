@@ -324,3 +324,8 @@
   .task-right { width: 140px; align-items:flex-end; }
   .detail-main { grid-template-columns: 1fr; }
 }
+.badge.coowner {
+  background: #f59e0b;
+  color: white;
+  margin-left: 8px;
+}

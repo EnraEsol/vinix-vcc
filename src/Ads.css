@@ -1,0 +1,66 @@
+/* ====== GLOBAL ADS ====== */
+
+.vcc-ad-banner {
+  position: fixed;
+  top: 120px;
+  width: 230px;
+  height: 580px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  border-radius: 18px;
+  padding: 20px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  z-index: 999;
+  animation: fadeIn 0.5s ease;
+}
+
+.vcc-left {
+  left: 20px;
+}
+
+.vcc-right {
+  right: 20px;
+}
+
+.ad-inner {
+  text-align: center;
+}
+
+.ad-inner h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.ad-inner p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.ad-inner span {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+/* Hover */
+.vcc-ad-banner:hover {
+  transform: translateY(-5px);
+  transition: 0.25s ease;
+}
+
+/* Auto hide saat mobile */
+@media (max-width: 1250px) {
+  .vcc-ad-banner {
+    display: none !important;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,4 +1,5 @@
 // src/utils/users.js
+
 const USERS_KEY = "vcc_users_v1";
 const CURRENT_USER_KEY = "vcc_current_user";
 
@@ -67,7 +68,7 @@ export function registerUser({ name, email, password }) {
   const user = createUser({
     name,
     email,
-    password, // plain text (demo only)
+    password, // plaintext — untuk demo
     skills: [],
     badges: [],
     experiences: [],
@@ -159,4 +160,11 @@ export function searchUsers(keyword) {
       u.email?.toLowerCase().includes(keyword) ||
       u.skills?.some((s) => s.toLowerCase().includes(keyword))
   );
+}
+
+/* =====================================================
+   🔥 FIX FOR SEARCH MODAL — GET ALL USERS
+===================================================== */
+export function getAllUsers() {
+  return loadUsers();
 }
